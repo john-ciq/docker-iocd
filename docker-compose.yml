@@ -1,0 +1,82 @@
+## VERSION 1.0.2
+
+version: '3.5'
+
+## Creates a full stack development environment containing:
+##  VS Code web IDE to edit the files/configs and build the iocd installer##
+
+## We list all the "services" - each "service" is a docker container
+##
+## Note that each service has a "networks" definition; this allows us to define one or more
+## virtual networks. Containers on the same network can see each other.
+services:
+
+## The web server used to serve the HTTP app
+  ##
+  ## http://localhost:18082/
+  web:
+    ## Build a docker image for PHP with the "mysqli" extension enabled
+    build:
+      context: php_apache_mysqli
+    image: php-apache-mysqli
+    container_name: web
+    networks:
+      - full_stack
+    # depends_on:
+    #   - db
+    ports:
+      - 18082:80
+    volumes:
+      ## This maps a local volume to the root of the web server, so the files can be served (same as the IDE)
+      - "source:/var/www/html"
+
+  ## A web-based IDE (Visual Studio Code)
+  ##
+  ## http://localhost:18081/
+  ide:
+    build:
+      context: ide
+    image: ide
+    container_name: ide
+    command: --auth none
+    ## The IDE needs to wait until the web server has started before mounting the shared source volume
+    ## in order to apply ownership/write permissions
+    depends_on:
+      - web
+    networks:
+      - full_stack
+    ports:
+      - 18081:8080
+    volumes:
+      ## This maps a local volume to the project files (the same volume for the web server)
+      - "source:/home/coder/project/"
+      # This volume allows us to persist the project files
+      - "vscode-settings:/home/coder/.local/"
+
+
+  ## The reverse proxy
+  ##
+  ## http://localhost:80
+  proxy:
+    ## Build a custom nginx container with a specific config and index.html
+    build:
+      context: proxy
+    image: reverse_proxy
+    container_name: proxy
+    networks:
+      - full_stack
+    depends_on:
+      - web
+      - ide
+    ports:
+      - 8888:80
+
+## A list of the virtual networks to use
+networks:
+  ## All the services reside on the same network, 'fullstack'
+  full_stack:
+    name: full_stack
+
+volumes:
+  source:
+  vscode-settings:
