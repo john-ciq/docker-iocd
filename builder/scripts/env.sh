@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 ## These environment variables are used by the scripts in the iocd scripts
 export DIR_BUILD_ROOT=/iocd-build
 export DIR_BUILD_TEMPLATE=${DIR_BUILD_ROOT}/template

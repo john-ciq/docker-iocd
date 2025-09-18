@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 ## Source the environment variables
 . /root/.env
 
