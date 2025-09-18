@@ -1,49 +1,68 @@
-<!-- TODO: Create README.md with intro, how to launch, how to connect folders, how to connect remote vsc (containers or folder) -->
-
-<!-- TODO: ide: image should contain starter project with README for scripts to run (export, ) -->
-<!-- TODO: web: can this be the io.browser? -->
-<!-- TODO: storage: contains binaries for export -->
-<!-- TODO: -->
-<!-- TODO: -->
-<!-- TODO: -->
-<!-- TODO: -->
-<!-- TODO: -->
-<!-- TODO: -->
-<!-- TODO: -->
+# The Dockerized IOCD Development System
+This project is used to Dockerize the build process for IOCD.
 
 
-# full-stack-containerized-development
+# Building
 
-All the required assets to develop and run a complete PHP/MySQL/JavaScript/CSS/HTML, including VS Code
+## Builder
+```
+cd builder
+docker build -t iocd-builder .
+```
 
-## Running The First Time
+## IDE
+```
+cd ide
+docker build-t iocd-ide
+```
 
-* Make sure that [docker](https://www.docker.com/) is installed.
-* Start the environment
-  * Run `docker-compose up`
-* Open a browser to:
-  * [http://localhost:10080](http://localhost:10080)
+# Running
 
-## Stopping
+## Builder
+It is likely that developers will want to persist work on disk. For this, the Builder container allows exporting the dev files. This is done by mounting a directory from the
+host machine into the Docker container. For these examples, `/path/to/dev/files` is considered to be a directory on the host machine where dev work will reside.
 
-When `docker-compose stop` is invoked, the environment will be stopped, but not removed. Subsequent to stopping, `docker-compose start` will
-re-start the environment.
+In general, this is accomplished by using the `--mount` command line argument at runtime. On Windows, this looks like:
+```
+docker run --rm --mount type=bind,src=c:\path\to\dev\files,target=/iocd-build/output iocd-builder iocd-builder
+```
 
-To fully remove the environment (and all data not mapped into containers), issue the command `docker-compose down`. Persisted data will remain locally until manually removed.
+With a Linux environment, the command looks like:
+```
+docker run --rm --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder iocd-builder
+```
 
-## Editing HTML/PHP
+This README will use the Linux mount style.
 
-Use the IDE to edit `index.php`. Add, update or create more pages as necessary.
+### Init a dev environment on disk
+This will populate the `iocd-build/output` directory with all the required files to develop a custom installer.
+```
+docker run --rm --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder iocd-init
+```
 
-## Managing The Database
+### Build from a directory on disk
+After editing the files, an installer can be built using the `iocd-build` command. It is common to have the same mount used with both the `iocd-init` and `iocd-build` commands.
+```
+docker run --rm --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder iocd-build
+```
 
-Open the database management page (`Adminer`) from the [main page](http://localhost:10080) and log into the database. The default password for `root` is `p@ssw0rd` (this can be changed within
-the `docker-compose.yml` file).
+### Interactive prompt in the container
+This is useful for developing by connecting with a Visual Studio Code instance via the remote container extension.
+```
+docker run --rm -it -name iocd-builder-console --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder
+```
+After the container starts, open Visual Studio Code and "Open a Remote Window", selecting "Attach to a Running Container..." and selecting the name of the running interactive container.
 
-## Persisting Data
+## IDE
+This image provides a web-based IDE, suitable for editing the development files. Unfortunately, Windows does not permit Docker-in-Docker, so for now, builds must still be performed in a
+separate Builder image.
+```
+docker run --rm -it --mount type=bind,src=/path/to/dev/files/sfx-installer-example,target=/home/coder/project -p 8080:8080 iocd-ide --auth none
+```
+Then, open a URL to [http://localhost:8080/?folder=/home/coder/project](http://localhost:8080/?folder=/home/coder/project)
 
-All data is persisted into three volumes:
 
-* MySQL
-* HTML Source
-* VS Code Settings
+## TODO Items
+- Create one container with both the IDE and the builder (because Windows does not permit Docker-in-Docker) / get the Builder running in the IDE container
+- Get the Node rest example running
+- Can the IO server be run from a Docker container?
