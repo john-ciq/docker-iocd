@@ -1,7 +1,6 @@
 # The Dockerized IOCD Development System
 This project is used to Dockerize the build process for IOCD.
 
-
 # Building
 
 ## Builder
