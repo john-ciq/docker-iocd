@@ -7,6 +7,5 @@ export DIR_BUILD_TEMPLATE=${DIR_BUILD_ROOT}/template
 export DIR_OUTPUT_ROOT=${DIR_BUILD_ROOT}/output
 export DIR_INPUT_ROOT=${DIR_BUILD_ROOT}/input
 
-
 ## The display variable for Xvfb
 export DISPLAY=:99
