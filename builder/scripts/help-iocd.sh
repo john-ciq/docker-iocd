@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 ## Source the environment variables and functions
 . /root/.env && . /root/.functions
 
