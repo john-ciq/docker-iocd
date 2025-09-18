@@ -117,6 +117,8 @@ docker cp iocd-builder-console:/iocd-build/output/sfx-installer-example/sfx-inst
 ```
 
 ## TODO Items
+- Create a rest-server container for running
 - Create one container with both the IDE and the builder (because Windows does not permit Docker-in-Docker) / get the Builder running in the IDE container
+- Add a web page which (perhaps running in an nginx or apache container) which provides a UI to created batch/sh files for starting the containers (based on mount dirs, etc.)
 - Get the Node rest example running
 - Can the IO server be run from a Docker container?
