@@ -6,7 +6,6 @@
 
 
 ## Functions to wrap Xvfb and wine
-## TODO: Should these functions be moved to a separate script and sourced instead?
 ##
 ## Function to start Xvfb if it's not already running; no-op otherwise
 run_xvfb() {
