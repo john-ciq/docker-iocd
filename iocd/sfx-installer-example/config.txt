@@ -1,0 +1,6 @@
+;!@Install@!UTF-8!
+Title="io.Connect Desktop"
+SetEnvironment="ORIGINAL_PATH=%%S\%%M"
+ExecuteFile="io-connect-installer.exe"
+ExecuteParameters="/ext:extensibility.json "
+;!@InstallEnd@!

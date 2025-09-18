@@ -1,0 +1,1 @@
+copy /Y icon.ico "%INSTALL_PATH%\Desktop\assets\images\icon.ico"
