@@ -13,7 +13,7 @@ docker build -t iocd-builder .
 ## IDE
 ```
 cd ide
-docker build-t iocd-ide
+docker build -t iocd-ide .
 ```
 
 # Running the Images
@@ -24,12 +24,12 @@ host machine into the Docker container. For these examples, `/path/to/dev/files`
 
 In general, this is accomplished by using the `--mount` command line argument at runtime. On Windows, this looks like:
 ```
-docker run --rm --mount type=bind,src=c:\path\to\dev\files,target=/iocd-build/output iocd-builder iocd-builder
+docker run --rm --mount type=bind,src=c:\path\to\dev\files,target=/iocd-build/output iocd-builder iocd-build
 ```
 
 With a Linux environment, the command looks like:
 ```
-docker run --rm --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder iocd-builder
+docker run --rm --mount type=bind,src=/path/to/dev/files,target=/iocd-build/output iocd-builder iocd-build
 ```
 
 This README will use the Linux mount style.
