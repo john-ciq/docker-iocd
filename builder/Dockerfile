@@ -43,10 +43,14 @@ RUN echo "source /root/.functions" >> /root/.bashrc
 
 
 ### Copy the scripts into /usr/bin
+COPY scripts/build-iocd.sh /usr/bin/
 COPY scripts/init-iocd.sh /usr/bin/
 COPY scripts/help-iocd.sh /usr/bin/
-COPY scripts/build-iocd.sh /usr/bin/
+##
+RUN chmod +x /usr/bin/build-iocd.sh
+RUN chmod +x /usr/bin/init-iocd.sh
+RUN chmod +x /usr/bin/help-iocd.sh
 ## Link the scripts to /usr/bin for easy access
+RUN ln -s /usr/bin/build-iocd.sh /usr/bin/iocd-build
 RUN ln -s /usr/bin/init-iocd.sh /usr/bin/iocd-init
 RUN ln -s /usr/bin/help-iocd.sh /usr/bin/iocd-help
-RUN ln -s /usr/bin/build-iocd.sh /usr/bin/iocd-build
