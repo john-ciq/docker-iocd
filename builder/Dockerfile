@@ -46,7 +46,7 @@ RUN echo "source /root/.functions" >> /root/.bashrc
 COPY scripts/build-iocd.sh /usr/bin/
 COPY scripts/init-iocd.sh /usr/bin/
 COPY scripts/help-iocd.sh /usr/bin/
-##
+## Allow execution
 RUN chmod +x /usr/bin/build-iocd.sh
 RUN chmod +x /usr/bin/init-iocd.sh
 RUN chmod +x /usr/bin/help-iocd.sh
